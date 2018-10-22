@@ -1,6 +1,6 @@
 # Dépanneur Sigmund
 
-[![Build Status](https://sigmundftw.visualstudio.com/Depanneur/_apis/build/status/Depanneur)](https://sigmundftw.visualstudio.com/Depanneur/_build/latest?definitionId=73)
+[![Build Status](https://dev.azure.com/sigmundftw/Depanneur/_apis/build/status/Depanneur)](https://dev.azure.com/sigmundftw/Depanneur/_build/latest?definitionId=73)
 
 Gestion des produits, des achats et des paiements pour le dépanneur de Sigmund.
 
