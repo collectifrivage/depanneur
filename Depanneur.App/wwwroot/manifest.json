@@ -1,0 +1,14 @@
+{
+    "name": "Dépanneur Chez Freud",
+    "short_name": "Dep Sigmund",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "icons": [
+        {
+            "src": "touch-icon.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        }
+    ]
+}

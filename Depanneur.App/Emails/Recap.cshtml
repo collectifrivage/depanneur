@@ -1,0 +1,179 @@
+﻿@using Depanneur.App.Helpers
+@inherits RazorLight.TemplatePage<Depanneur.App.Models.UserRecap>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- So that mobile will display zoomed in -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- enable media queries for windows phone 8 -->
+  <meta name="format-detection" content="telephone=no"> <!-- disable auto telephone linking in iOS -->
+  <title>Historique hebdomadaire de @Model.Name.DeduceFirstName()</title>
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+    table {
+      border-spacing: 0;
+    }
+    table td {
+      border-collapse: collapse;
+    }
+    table {
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+    img {
+      -ms-interpolation-mode: bicubic;
+    }
+    @@media screen and (max-width: 599px) {
+      .container {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
+    @@media screen and (max-width: 400px) {
+      .container-padding {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+      }
+    }
+  </style>
+</head>
+<body style="font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0;" bgcolor="#f8f8f8" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<!-- 100% background wrapper (grey background) -->
+    <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" bgcolor="#f8f8f8">
+        <tr>
+            <td align="center" valign="top" bgcolor="#f8f8f8" style="background-color: #f8f8f8;">
+                <br>
+                <!-- 600px container (white background) -->
+                <table border="0" width="600" cellpadding="0" cellspacing="0" style="width: 600px; max-width: 600px;">
+                    <tr>
+                        <td align="left" style="font-weight: bold; padding-bottom: 12px; color: #2b2b2b; font-family: Helvetica, Arial, sans-serif; padding-left: 40px; padding-right: 40px; font-size: 24px;">
+                            DÉPANNEUR
+                        </td>
+                        <td align="right" style="font-weight: bold; padding-bottom: 12px; color: #2b2b2b; font-family: Helvetica, Arial, sans-serif; padding-left: 40px; padding-right: 40px;">
+                            @Model.Name
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" colspan="2" style="background-color: #ffffff; padding: 12px 40px;" bgcolor="#ffffff">
+                            <div style="font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; text-align: center; color: #2b2b2b;" align="center">
+                                <br>
+                                <h1 style="font-size: 24px;">Historique hebdomadaire</h1>
+                                <h2>Semaine @(Model.RecapWeek)</h2>
+                                <br>
+                            </div>
+                            <div style="font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; text-align: center; color: #2b2b2b; background:#eee; padding:10px;">
+                                @if (Model.CurrentBalance <= 5)
+                                {
+                                    <h3>Ton solde actuel est de @Model.CurrentBalance.ToString("0.00 $")</h3>
+                                    <p style="color:green;">Tout va bien!</p>
+                                }
+                                else if (Model.CurrentBalance < 10)
+                                {
+                                    <h3>Ton solde actuel est de @Model.CurrentBalance.ToString("0.00 $")</h3>
+                                    <p style="color:orange; font-weight: bold;">Tu devrais payer ton compte! Aussi, n'hésite pas à déposer du crédit.</p>
+                                }
+                                else if (Model.CurrentBalance < 15)
+                                {
+                                    <div style="color:orangered; border: 1px dashed orangered; padding:10px;">
+                                        <h3 style="color:orangered;">Ton solde actuel est de @Model.CurrentBalance.ToString("0.00 $")</h3>
+                                        <p style="color:orangered; font-weight:bold;">Soit tu manges trop de chocolat ou ça fait des mois que tu ne paies pas. Va donc porter un petit 20$ à Nadège. As-tu pensé payer ton loyer pi checker tes cartes?</p>
+                                    </div>
+                                    
+                                }
+                                else if (Model.CurrentBalance < 20)
+                                {
+                                    <div style="color:red; border: 2px dashed red; padding:10px;">
+                                        <h3 style="color:red;">Ton solde actuel est de @Model.CurrentBalance.ToString("0.00 $")</h3>
+                                        <p style="color:red; font-weight:bold;">On est à veille de te charger de l'intérêt. Va payer Nadège rapidement et on ne dira rien aux boss.</p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="color:red; border: 5px dashed red; padding:10px;">
+                                        <h3 style="color:red;">Ton solde actuel est de @Model.CurrentBalance.ToString("0.00 $")</h3>
+                                        <p style="color:red; font-weight:bold;">Wow, tu t'es rendu à @Model.CurrentBalance.ToString("0.00 $") sans te faire casser les jambes ou pogner par les boss! On te rembourse ton dépanneur! NOT. Ta prochaine paye risque de ne pas passer, tu checkeras tes comptes. (ou bien va payer et tout ira bien!)</p>
+                                    </div>
+                                }
+                            </div>
+
+                            <br>
+
+                            <div style="font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; text-align: left; color: #2b2b2b;" align="left">
+                                <table style="border-collapse: collapse;">
+                                    <thead>
+                                        <tr>
+                                            <th style="padding: 5px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #2b2b2b; text-align: left;" align="left">Produit</th>
+                                            <th style="padding: 5px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #2b2b2b; text-align: right;" align="right">Nb. (Montant payé)</th>
+                                            <th style="padding: 5px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #2b2b2b; text-align: right;" align="right">Semaine précédente</th>
+                                            <th style="padding: 5px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #2b2b2b; text-align: center;" align="center">Différence</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var p in Model.Purchases)
+                                        {
+                                            <tr>
+                                                <td style="border-top-width: 1px; border-top-color: #eee; border-top-style: solid; padding: 5px;">
+                                                    @p.ProductName
+                                                    @if (p.IsSubscribed)
+                                                    {
+                                                        <img src="@Model.BaseUrl/email-sub.png" width="19" height="16" style="vertical-align: middle" title="Vous êtes abonnés à ce produit" alt="[Abonné]" />
+                                                    }
+                                                </td>
+                                                <td style="padding: 5px; border-top-width: 1px; border-top-style: solid; border-top-color: #eee; text-align: right;" align="right">@p.RecapCount (@p.RecapTotal.ToString("0.00 $"))</td>
+                                                <td style="padding: 5px; border-top-width: 1px; border-top-style: solid; border-top-color: #eee; text-align: right;" align="right">@p.PreviousCount (@p.PreviousTotal.ToString("0.00 $"))</td>
+                                                <td style="padding: 5px; border-top-width: 1px; border-top-style: solid; border-top-color: #eee; text-align: center;" align="center">@p.CountDelta.ToString("+0;-0;==") (@p.TotalDelta.ToString("+0.00 $;-0.00 $;=="))</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td style="border-top-width: 1px; border-top-color: #2b2b2b; border-top-style: solid; padding: 5px;"><strong>Total</strong></td>
+                                            <td style="padding: 5px; border-top-width: 1px; border-top-style: solid; border-top-color: #2b2b2b; text-align: right;" align="right">@Model.RecapTotal.ToString("0.00 $")</td>
+                                            <td style="padding: 5px; border-top-width: 1px; border-top-style: solid; border-top-color: #2b2b2b; text-align: right;" align="right">@Model.PreviousTotal.ToString("0.00 $")</td>
+                                            <td style="padding: 5px; border-top-width: 1px; border-top-style: solid; border-top-color: #2b2b2b; text-align: center;" align="center">@Model.TotalDelta.ToString("+0.00 $;-0.00 $;==")</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                                @if (Model.Purchases.Any(p => p.IsSubscribed))
+                                {
+                                    <p>
+                                        N.B : Les produits marqués
+                                        <img src="@Model.BaseUrl/email-sub.png" width="19" height="16" style="vertical-align: middle" alt="[Abonné]" />
+                                        sont automatiquement facturés à la fréquence choisie.
+                                        <br />
+                                        N'hésite pas à <a href="@Model.BaseUrl">modifier tes paramètres d'abonnements</a> dans l'application.
+                                    </p>
+                                }
+
+                                <br>
+                                <p><strong>Oublié quelque chose ?</strong> Ça arrive à tout le monde 😊</p>
+                                <p><a href="@Model.BaseUrl">Va ajouter ce qui manque!</a></p>
+                            </div>
+                            <br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" colspan="2" style="padding-top: 12px; color: #ababab; font-family: Helvetica, Arial, sans-serif; font-size:14px; padding-left: 40px; padding-right: 40px;">
+                            <p>Le dépanneur Freud, en partenariat avec la ville de Saint-Thug, vous invite à récupérer vos courriels. Comment? On sait pas. Faites une différence!</p>
+                        </td>
+                    </tr>
+                </table>
+                <!--/600px container -->
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="top" bgcolor="#f8f8f8" style="background-color: #f8f8f8;">
+                <br>
+            </td>
+        </tr>
+    </table>
+<!--/100% background wrapper-->
+</body>
+</html>

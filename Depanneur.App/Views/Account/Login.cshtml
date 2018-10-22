@@ -1,0 +1,87 @@
+﻿@inject SignInManager<User> SignInManager
+
+@{
+    var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+    var message = ViewData["message"] as string;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dépanneur chez Freud</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Lobster|Roboto:400,700" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+        html, body {
+            background-color: #EEE;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+        }
+
+        .main {
+            text-align: center;
+            margin: 0 30px;
+        }
+
+        a, a:active, a:visited { color: inherit; }
+
+        .title {
+            font-family: 'Lobster', cursive;
+            font-size: 40px;
+            margin: 0.5em 0;
+        }
+
+        .title small {
+            font-size: 0.5em;
+            display: block;
+        }
+
+        .error {
+            border: solid 1px #600;
+            border-radius: 10px;
+            background-color: #FCC;
+            display: inline-block;
+            padding: 10px;
+            color: #600;
+        }
+
+        #freud {
+            cursor: pointer;
+            max-width: 100%;
+        }
+
+        @@media(min-width: 350px) {
+            .title {
+                font-size: 60px;
+            }
+        }
+        @@media(min-width: 500px) {
+            .title {
+                font-size: 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <p class="title">
+            <small>Bienvenue au dépanneur</small>
+            Chez Freud
+        </p>
+
+        @if (!string.IsNullOrWhiteSpace(message))
+        {
+            <p class="error">@message</p>
+        }
+
+        <p>Cliquez sur le betta pour vous identifier.</p>
+
+        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+            <input type="hidden" name="provider" value="Google" />
+            <img id="freud" src="/freud.png" onclick="this.parentElement.submit();" />
+        </form>
+    </div>
+</body>
+</html>

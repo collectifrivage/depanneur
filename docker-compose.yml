@@ -1,0 +1,23 @@
+version: "3.3"
+
+services:
+  db:
+    image: microsoft/mssql-server-linux
+    environment: 
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Depanneur_S1gmund
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - "5001:8025"
+  dep:
+    build: .
+    ports:
+      - "5000:80"
+    environment:
+      EMAIL__MODE: "Smtp"
+      EMAIL__SMTP__HOST: "mail"
+      EMAIL__SMTP__PORT: "1025"
+      CONNECTIONSTRINGS__DEPANNEURDB: "Server=db;Database=Depanneur;User Id=sa;Password=Depanneur_S1gmund"
+      GRAPHQL__EXPOSEEXCEPTIONS: "true"
+      DEFAULTTIMEZONE: "America/Toronto"

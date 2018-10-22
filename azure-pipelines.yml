@@ -1,0 +1,41 @@
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+    checkLatest: True
+
+- script: npm install
+  displayName: npm install
+
+- script: npm run webpack-prod
+  displayName: npm run webpack-prod
+
+- task: DotNetCoreInstaller@0
+  inputs:
+    packageType: 'sdk'
+    version: '2.1.403'
+
+- script: dotnet restore
+  displayName: dotnet restore
+
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: dotnet build
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet publish
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'release'

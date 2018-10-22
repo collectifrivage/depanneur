@@ -1,0 +1,10 @@
+.vs
+.vscode
+bin
+obj
+node_modules
+
+*.user
+npm-debug.log
+
+Depanneur.App/wwwroot/bundles/*

@@ -1,0 +1,35 @@
+﻿<Project ToolsVersion="15.0" Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>ea454dd9-10d4-47a9-811d-90b13462b031</UserSecretsId>
+    <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentEmail.Razor" Version="2.5.1" />
+    <PackageReference Include="FluentEmail.SendGrid" Version="2.5.0" />
+    <PackageReference Include="FluentEmail.Smtp" Version="2.5.2" />
+    <PackageReference Include="graphiql" Version="1.1.0" />
+    <PackageReference Include="GraphQL" Version="2.1.0" />
+    <PackageReference Include="GraphQL.Authorization" Version="1.1.26" />
+    <PackageReference Include="hangfire" Version="1.6.20" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Emails\*.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Target Name="CopyCustomContentOnPublish" AfterTargets="AfterPublish">
+    <ItemGroup>
+      <EmailTemplates Include="Emails\*.cshtml" />
+    </ItemGroup>
+    <Copy SourceFiles="@(EmailTemplates)" DestinationFolder="$(PublishDir)%(EmailTemplates.RelativeDir)" />
+  </Target>
+  <PropertyGroup>
+    <!-- see https://github.com/aspnet/Razor/issues/2406 -->
+    <_RazorBuildServerPipeName>razor-issues-2406</_RazorBuildServerPipeName>
+  </PropertyGroup>
+</Project>
