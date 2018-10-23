@@ -19,7 +19,7 @@ namespace Depanneur.App.Schema
             Description = "Details about a transaction.";
 
             Field(x => x.Id).Description("The transaction ID");
-            Field(x => x.Timestamp).Description("The time (in UTC) when this transaction took place.");
+            Field<DateTimeGraphType>("timestamp", description: "The time (in UTC) when this transaction took place.");
             Field(x => x.Amount).Description("The amount of this transaction. Negative numbers indicate a credit.");
             Field(x => x.NewBalance).Description("The user's new balance after this transaction was recorded.");
             Field<UserType>("user", description: "The user associated with this transaction.");
@@ -28,7 +28,7 @@ namespace Depanneur.App.Schema
         public static void Implement<T>(ObjectGraphType<T> type, DataLoader loader, UserRepository users) where T : Transaction
         {
             type.Field(x => x.Id).Description("The transaction ID");
-            type.Field("timestamp", x => DateTime.SpecifyKind(x.Timestamp, DateTimeKind.Utc)).Description("The time (in UTC) when this transaction took place.");
+            type.Field<DateTimeGraphType>("timestamp", resolve: x => DateTime.SpecifyKind(x.Source.Timestamp, DateTimeKind.Utc), description: "The time (in UTC) when this transaction took place.");
             type.Field(x => x.Amount).Description("The amount of this transaction. Negative numbers indicate a credit.");
             type.Field(x => x.NewBalance).Description("The user's new balance after this transaction was recorded.");
             type.Field<UserType>("user", resolve: ctx => loader.LoadBatch("GetUsersById", ctx.Source.UserId, users.GetUsersById), description: "The user associated with this transaction.");
