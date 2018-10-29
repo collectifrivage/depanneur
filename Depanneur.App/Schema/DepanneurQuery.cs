@@ -23,7 +23,7 @@ namespace Depanneur.App.Schema
                     new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id", Description = "The ID of the product." }
                 ),
                 resolve: ctx => products.Get(ctx.GetArgument<int>("id"))
-            ).AuthorizeWith(Policies.ManageProducts);
+            );
             
             FieldAsync<ListGraphType<ProductType>>(
                 "products",
