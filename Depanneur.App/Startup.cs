@@ -23,6 +23,7 @@ using GraphQL.Validation;
 using FluentEmail.Core.Interfaces;
 using FluentEmail.Smtp;
 using System.Net.Mail;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Depanneur.App
 {
@@ -58,6 +59,17 @@ namespace Depanneur.App
 
                     options.ClientId = googleAuthConfig["ClientId"];
                     options.ClientSecret = googleAuthConfig["ClientSecret"];
+
+                    // https://github.com/aspnet/AspNetCore/issues/6069#issuecomment-449461197
+                    options.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
+                    options.ClaimActions.Clear();
+                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                    options.ClaimActions.MapJsonKey("urn:google:profile", "link");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    options.ClaimActions.MapJsonKey("urn:google:image", "picture");
                 });
 
             /* TODO PERFO: Faudrait mettre un interval raisonnable ici, ex: 1 minute.
