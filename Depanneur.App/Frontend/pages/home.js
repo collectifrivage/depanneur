@@ -78,7 +78,8 @@ class Home extends React.Component {
 
     this.state = {
       sortOption: store.get("dep.catalog.sort") || "alpha",
-      showStats: store.get("dep.catalog.showStats") !== false
+      showStats: store.get("dep.catalog.showStats") !== false,
+      groupSubscriptions: store.get("dep.catalog.groupSubscriptions") !== false
     };
 
     this.recentPurchases = [];
@@ -110,6 +111,7 @@ class Home extends React.Component {
   }
 
   renderCatalog(products) {
+
     return (
       <div>
         <div
@@ -128,26 +130,70 @@ class Home extends React.Component {
             onOptionSelected={o => this.setSortOption(o)}
           />
 
-          <Checkbox
-            label="Afficher les statistiques d'achat"
-            checked={this.state.showStats}
-            onChecked={c => this.setStatsVisible(c)}
-          />
+          <div style={{marginTop: 5}}>
+            <Checkbox
+              label="Afficher les statistiques d'achat"
+              checked={this.state.showStats}
+              onChecked={c => this.setStatsVisible(c)}
+            />
+            <br/>
+            <Checkbox
+              label="Regrouper les abonnements"
+              checked={this.state.groupSubscriptions}
+              onChecked={c => this.setGroupSubscriptions(c)}
+            />
+          </div>
         </div>
 
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            margin: "10px 0"
-          }}
-        >
-          <tbody>
-            {products.map((p, i) => this.renderCatalogRow(p, i === 0))}
-          </tbody>
-        </table>
+        {
+          this.state.groupSubscriptions 
+            ? this.renderGroupedSubscriptions(products)
+            : this.renderProductList(products)
+        }
+        
       </div>
     );
+  }
+
+  renderGroupedSubscriptions(products) {
+    const subscribed = products.filter(x => x.isSubscribed);
+    const notSubscribed = products.filter(x => !x.isSubscribed);
+
+    return (
+      <React.Fragment>
+        {
+          subscribed.length > 0 &&
+          <React.Fragment>
+            <p>Produits abonnés</p>
+            <p style={{color:"#999", fontSize: "75%"}}>Ces produits vous sont automatiquement facturés selon les paramètres choisis. Tout achat effectué ici sera facturé en surplus à votre abonnement.</p>
+            {this.renderProductList(subscribed)}
+          </React.Fragment>
+        }
+
+        {
+          subscribed.length > 0 && notSubscribed.length > 0 &&
+          <React.Fragment><hr/><p>Autres produits</p></React.Fragment>
+        }
+
+        {this.renderProductList(notSubscribed)}
+      </React.Fragment>
+    );
+  }
+
+  renderProductList(products) {
+    return (
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          margin: "10px 0"
+        }}
+      >
+        <tbody>
+          {products.map((p, i) => this.renderCatalogRow(p, i === 0))}
+        </tbody>
+      </table>
+    )
   }
 
   renderCatalogRow(product, isFirst) {
@@ -172,7 +218,8 @@ class Home extends React.Component {
         </td>
         <td style={[cellStyle, { width: 80, padding: "10px 0" }]}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            {product.isSubscribed ? null : (
+            {
+              (!product.isSubscribed || this.state.groupSubscriptions) &&
               <Mutation
                 mutation={purchaseMutation}
                 variables={{ productId: product.id }}
@@ -183,7 +230,7 @@ class Home extends React.Component {
                   </BuyButton>
                 )}
               </Mutation>
-            )}
+            }
             {product.canSubscribe || product.isSubscribed ? (
               <SubscribeButton
                 subscribed={product.isSubscribed}
@@ -313,6 +360,14 @@ class Home extends React.Component {
 
     this.setState({
       showStats: visible
+    });
+  }
+
+  setGroupSubscriptions(group) {
+    store.set("dep.catalog.groupSubscriptions", group);
+
+    this.setState({
+      groupSubscriptions: group
     });
   }
 
