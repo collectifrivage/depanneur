@@ -77,7 +77,7 @@ class MyTransactions extends React.Component {
                 
                                 <TransactionsList transactions={data.user.transactions.items} />
                                 {
-                                    this.state.pageCount > 1
+                                    data.user.transactions.pageCount > 1
                                         ? <Paging style={{marginTop: 20}} 
                                                   current={this.state.currentPage} 
                                                   count={data.user.transactions.pageCount}
