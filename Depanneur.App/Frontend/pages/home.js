@@ -136,12 +136,17 @@ class Home extends React.Component {
               checked={this.state.showStats}
               onChecked={c => this.setStatsVisible(c)}
             />
-            <br/>
-            <Checkbox
-              label="Regrouper les abonnements"
-              checked={this.state.groupSubscriptions}
-              onChecked={c => this.setGroupSubscriptions(c)}
-            />
+            {
+              products.filter(x => x.isSubscribed).length > 0 &&
+              <React.Fragment>
+                <br/>
+                <Checkbox
+                  label="Regrouper les abonnements"
+                  checked={this.state.groupSubscriptions}
+                  onChecked={c => this.setGroupSubscriptions(c)}
+                />
+              </React.Fragment>
+            }
           </div>
         </div>
 
